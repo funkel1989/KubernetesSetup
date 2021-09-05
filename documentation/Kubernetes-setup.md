@@ -90,3 +90,19 @@ sudo cat /etc/rancher/k3s/k3s.yaml
 ## Install Rancher
 
 - Follow these instructions to [Install Rancher](./install-configure-rancher.md)
+
+## Install Longhorn
+
+- NOTE: It is best to create another k3s agent server that will act as the dedicated storage server. Set this up now. It can be configured exactly like the pervious agent server.
+- NOTE: The longhorn UI seems to be really slow
+
+- While setting up longhorn I went the route of using the rancher app catalog. This repo includes a values file required (at least during my last install it was required) if you want to setup taints but generally after installation I use the UI to disable nodes not used for storage so long horn only uses those roles.
+
+- UI allows the setting up a taint and I utilize the below settings
+    - Longhorn UI: StorageOnly=true:NoExecute;CriticalAddonsOnly=true:NoExecute
+    - Commands to execute against my nodes
+        ```bash
+        kubectl taint nodes k3s-storage-1 CriticalAddonsOnly=true:NoExecute
+        kubectl taint nodes k3s-storage-1 StorageOnly=true:NoExecute
+        ```
+        

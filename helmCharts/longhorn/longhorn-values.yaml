@@ -1,0 +1,32 @@
+longhornManager:
+  tolerations:
+    - key: "CriticalAddonsOnly"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
+    - key: "StorageOnly"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
+
+longhornDriver:
+  tolerations:
+    - key: "CriticalAddonsOnly"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
+    - key: "StorageOnly"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
+
+longhornUI:
+  tolerations:
+    - key: "CriticalAddonsOnly"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
+    - key: "StorageOnly"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
