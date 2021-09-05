@@ -69,5 +69,24 @@ k3s-a-1   Ready    <none>                 21s   v1.21.4+k3s1
 
 ```
 
+## Setup Kubectl on development Machine
 
-- [Install Metallb]()
+- cat out your k3s.yaml file from a control plane node
+
+```bash
+sudo cat /etc/rancher/k3s/k3s.yaml
+```
+
+- Copy the file and paste into your .kube/config file on your developer machine
+- Replace the Ip address set to 127.0.0.1:6443 with your nginx load balancer ip address
+
+- test a kubectl get nodes from your development machine
+
+
+## Installing MetalLB
+
+- Follow these instructions to [Install Metallb](./install-configure-metallb.md)
+
+## Install Rancher
+
+- Follow these instructions to [Install Rancher](./install-configure-rancher.md)
