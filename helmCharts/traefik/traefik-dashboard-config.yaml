@@ -1,0 +1,19 @@
+---
+## adding secret to traefik dashboard
+apiVersion: v1
+kind: Secret
+metadata:
+  name: traefik-dashboard-auth-secret
+  namespace: traefik-system
+data:
+  users: |
+    something goes here
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-dashboard-basicauth
+  namespace: traefik-system
+spec:
+  basicAuth:
+    secret: traefik-dashboard-auth-secret

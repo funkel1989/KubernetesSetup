@@ -1,0 +1,33 @@
+---
+ports:
+  web:
+    port: 80
+  websecure:
+    port: 443
+
+ingressRoute:
+  dashboard:
+    enabled: false # We will use a custom inrgessRoute with basic auth instead of the default one
+
+additionalArguments:
+  - --entryPoints.web.http.redirections.entryPoint.to: websecure
+  - --entryPoints.web.http.redirections.entryPoint.scheme: https
+  - --accesslog: true
+  - --accesslog.format: json
+  - --log.level: DEBUG
+  - --ping: true
+  - --metrics.prometheus: true
+  - --providers.kubernetesIngress.ingressClass: traefik-cert-manager
+  - --entryPoints.websecure.http.tls: true
+
+# The following lines are needed if you have an error like: error while building entryPoint web: error preparing server: error opening listener: listen tcp :80: bind: permission denied
+# It just means that Traefik is unable to listen to connections on the host because of a lack of permissions.
+# Hence the need for aditionnal permissions.
+securityContext:
+  capabilities:
+    drop: [ALL]
+    add: [NET_BIND_SERVICE]
+  readOnlyRootFilesystem: true
+  runAsGroup: 0
+  runAsNonRoot: false
+  runAsUser: 0

@@ -82,7 +82,6 @@ sudo cat /etc/rancher/k3s/k3s.yaml
 
 - test a kubectl get nodes from your development machine
 
-
 ## Installing MetalLB
 
 - Follow these instructions to [Install Metallb](./install-configure-metallb.md)
@@ -99,10 +98,40 @@ sudo cat /etc/rancher/k3s/k3s.yaml
 - While setting up longhorn I went the route of using the rancher app catalog. This repo includes a values file required (at least during my last install it was required) if you want to setup taints but generally after installation I use the UI to disable nodes not used for storage so long horn only uses those roles.
 
 - UI allows the setting up a taint and I utilize the below settings
-    - Longhorn UI: StorageOnly=true:NoExecute;CriticalAddonsOnly=true:NoExecute
-    - Commands to execute against my nodes
-        ```bash
-        kubectl taint nodes k3s-storage-1 CriticalAddonsOnly=true:NoExecute
-        kubectl taint nodes k3s-storage-1 StorageOnly=true:NoExecute
-        ```
-        
+  - Longhorn UI: StorageOnly=true:NoExecute;CriticalAddonsOnly=true:NoExecute
+  - Commands to execute against my nodes
+    ```bash
+    kubectl taint nodes k3s-storage-1 CriticalAddonsOnly=true:NoExecute
+    kubectl taint nodes k3s-storage-1 StorageOnly=true:NoExecute
+    ```
+
+## Install Traefik 2
+
+- NOTE: Traefik is being setup to receive lets encrypt certs with a dns challenge set to route 53. The traefik config includes the secret needed for this challenge along with a config map and persistent claim. Set this up first before you do anything else.
+- NOTE: When applying the persistent storage claim longhorn has to be set as default for it to be used and it must be the only default. The current install of Rancher
+  creates a local-path and has a pod that consistently will re-create this and set it as default. I normally get my command ready to apply for my helm chart, delete the local-path hit enter and more times then not I will be fast enough to get my persistent claim added before local-path comes back. Still looking for a better resolution to this problem as longhorn should always be the default.
+
+- Setup helm to install traefik
+
+```bash
+helm repo add traefik https://helm.traefik.io/traefik
+helm repo update
+```
+
+- Apply traefik config yaml
+
+```bash
+kubectl apply -f helmCharts/traefik/traefik-config.yaml
+```
+
+- Install traefik using help and apply the traefik-values.yaml to the helm install command
+
+```bash
+helm install traefik traefik/traefik --namespace=traefik-system --values=helmCharts/traefik/traefik-values.yaml
+```
+
+- Install traefik ingress dashboard
+
+```bash
+kubectl apply -f helmCharts/traefik/traefik-dashboard-ingressroute.yaml
+```

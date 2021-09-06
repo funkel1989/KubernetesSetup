@@ -29,10 +29,11 @@ helm repo add jetstack https://charts.jetstack.io
 helm repo update
 
 ## Install Cert Manager
-helm install \
+helm upgrade --install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --version v1.5.3
+  --version v1.5.3 \
+  --set installCRDs=true
 
 ## Check rollout status. Do not continue until all pods are completely up
 kubectl -n cattle-system rollout status deploy/rancher

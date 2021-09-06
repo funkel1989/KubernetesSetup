@@ -1,0 +1,24 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  namespace: cert-manager
+spec:
+  acme:
+    email: funkel1989@gmail.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # Secret resource used to store the account's private key.
+      name: let-encrypt-prod-private-key
+    solvers:
+    - selector:
+        dnsZones:
+          - "mycavanaughnetwork.com"
+      dns01:
+        route53:
+          region: us-east-2
+          accessKeyID: AKIAVNTS7S77IPAKNJWF
+          hostedZoneID: Z0063874J3OJRI1DNBI5
+          secretAccessKeySecretRef:
+            name: route53-traefik-secret
+            key: AWS_SECRET_ACCESS_KEY
