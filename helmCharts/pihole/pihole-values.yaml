@@ -316,10 +316,10 @@ ftl: {}
   # MAXDBDAYS: 14
 
 # -- port the container should use to expose HTTP traffic
-webHttp: "80"
+webHttp: "55480"
 
 # -- port the container should use to expose HTTPS traffic
-webHttps: "443"
+webHttps: "55443"
 
 # -- should the container use host network
 hostNetwork: "true"
@@ -369,3 +369,6 @@ podDnsConfig:
   - 127.0.0.1
   - 8.8.8.8
 
+extraEnvVars:
+  TZ: "America/Detroit"
+  ServerIP: 192.168.1.23 ## This is the primary control place kubernetes cluster
