@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pihole-mycavanaughnetwork-cert-staging
+  namespace: pihole
+spec:
+  commonName: pihole.mycavanaughnetwork.com
+  secretName: pihole-mycavanaughnetwork-cert-staging
+  dnsNames:
+    - pihole.mycavanaughnetwork.com
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
