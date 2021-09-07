@@ -7,7 +7,7 @@
 - 192.168.1.40 - 192.168.1.60: Network Databases
 - 192.168.1.61 - 192.168.1.80: Other Servers
 - 192.168.1.81 - 192.168.1.99: Battle Line Servers
-- 192.168.1.100 - 192.168.1.200: DHCP Range
+- 192.168.1.100 - 192.168.1.150: DHCP Range
 - 192.168.1.201 - 192.168.1.249: Kube cluster MetalLB ip ranges
 - 192.168.1.250 - 192.168.1.254: ISP Network Devices
 

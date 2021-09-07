@@ -9,7 +9,23 @@
 - Install the following dependencies
   - nfs-common
   - open-iscsi
-  - [resolve.conf](./configure-resolvconf.md)
+  - [resolve.conf](./configure-resolvconf.md)  ## This is potentially not needed with disabling the below systemd-resolved
+  - If using Ubuntu disable systemd-resolved
+    - Disable the service
+      ```bash
+      sudo systemctl stop systemd-resolved
+      sudo systemctl disable systemd-resolved
+      ```
+    - Edit /etc/systemd/resolved.conf with the below and comment out everything else
+      ```bash
+      [Resolve]
+      DNS=8.8.8.8
+      DNSStubListener=no
+      ```
+    - Run the below command
+      ```bash
+      sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+      ```
   - Set esxi configuration needed on kubernetes servers so kubernetes can see virtual drives
     - disk.EnableUUID = TRUE
       - When the virtual machine is powered off

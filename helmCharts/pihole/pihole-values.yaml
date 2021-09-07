@@ -1,57 +1,20 @@
-## pihole-values.yaml---
-replicaCount: 1
-strategyType: RollingUpdate
-maxSurge: 1
-maxUnavailable: 1
-image:
-  repository: "pihole/pihole"
-  tag: v5.8.1
-  pullPolicy: IfNotPresent
+---
 dnsHostPort:
   enabled: true
   port: 53
 serviceDns:
-  mixedService: false
-  type: NodePort
-  port: 53
-  externalTrafficPolicy: Local
-  loadBalancerIP: ""
-  annotations: {}
-    # metallb.universe.tf/address-pool: network-services
-    # metallb.universe.tf/allow-shared-ip: pihole-svc
+  type: LoadBalancer
+  loadBalancerIP: "192.168.1.210"
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
 serviceDhcp:
   enabled: true
   type: NodePort
-  externalTrafficPolicy: Local
-  loadBalancerIP: ""
-  annotations: {}
-    # metallb.universe.tf/address-pool: network-services
-    # metallb.universe.tf/allow-shared-ip: pihole-svc
 serviceWeb:
-  http:
-    enabled: true
-    port: 80
-  https:
-    enabled: true
-    port: 443
-  type: ClusterIP
-  externalTrafficPolicy: Local
-  loadBalancerIP: ""
-  annotations: {}
-    # metallb.universe.tf/address-pool: network-services
-    # metallb.universe.tf/allow-shared-ip: pihole-svc
-virtualHost: pi.hole
-probes:
-  liveness:
-    enabled: true
-    initialDelaySeconds: 60
-    failureThreshold: 10
-    timeoutSeconds: 5
-  readiness:
-    enabled: true
-    initialDelaySeconds: 60
-    failureThreshold: 3
-    timeoutSeconds: 5
+  type: LoadBalancer
+  loadBalancerIP: "192.168.1.210"
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
 persistentVolumeClaim:
   enabled: true
   existingClaim: "pihole"
@@ -59,16 +22,8 @@ persistentVolumeClaim:
   accessModes:
     - ReadWriteOnce
   size: "500Mi"
-serviceTCP:
-  type: ClusterIP
-serviceUDP:
-  type: ClusterIP
 admin:
   existingSecret: "pihole-secret"
-antiaff:
-  enabled: false
-  avoidRelease: pihole1
-  strict: true
 webHttp: "55480"
 webHttps: "55443"
 hostNetwork: "true"
@@ -81,4 +36,4 @@ podDnsConfig:
   - 8.8.8.8
 extraEnvVars:
   TZ: "America/Detroit"
-  ServerIP: 192.168.1.23 ## This is the primary control place kubernetes cluster
+  ServerIP: 192.168.1.23 ## This is the node in the cluster that it will always load on
